@@ -32,14 +32,22 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.consumer.concurrency:3}")
     private Integer concurrency;
 
+    // Producer Serializers
+    @Value("${spring.kafka.consumer.key-deserializer}")
+    private String consumerKeySerializer;
+
+    @Value("${spring.kafka.consumer.value-deserializer}")
+    private String consumerValueSerializer;
+
+
     @Bean
     public ConsumerFactory<String, Object> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         configProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, consumerKeySerializer);
+        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, consumerValueSerializer);
 
         // Trust all packages (or specify your DTO package)
         configProps.put(JsonDeserializer.TRUSTED_PACKAGES, "*");

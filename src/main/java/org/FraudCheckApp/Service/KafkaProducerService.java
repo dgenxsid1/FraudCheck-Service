@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class KafkaProducerService {
-    @Qualifier("fraudCheckKafkaTemplate")
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    @Qualifier("genericKafkaTemplate")
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private static final Logger log = LoggerFactory.getLogger(KafkaProducerService.class);
 
     // Spring auto-injects the configured KafkaTemplate
-    public KafkaProducerService(KafkaTemplate<String, Object> kafkaTemplate) {
+    public KafkaProducerService(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(String topic, Object message) {
+    public void sendMessage(String topic, String message) {
         try {
             log.info("Starting to send the message");
             kafkaTemplate.send(topic, message);  // Uses the template to send
